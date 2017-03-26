@@ -1,14 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>D3 Page Template</title>
-        <script type="text/javascript" src="d3/d3.js"></script>
-    </head>
-    <body>
-        <script type="text/javascript">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Assignment 2</title>
+		<script type="text/javascript" src="d3/d3.js"></script>
+		<link rel="stylesheet" href="style.css">
+	</head>
+<body>
+	<h2>Assignment 2A: One scatter plot and two datasets</h2> 
+	<div id="id2b"></div>
+	<script type="text/javascript">
 		
-            // Your beautiful D3 code will go here
-        </script>
-    </body>
+		var w = 650;
+		var h = 400;
+		var padding = 60;
+		
+		var scaleX;
+		var scaleY;
+		var rScale;
+		
+		var svg = d3.select("#id2b")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+	
+		var dataset;
+		var dataset2015;
+		d3.json("data2003.json", function(json) {
+			dataset = json;
+			createPlot();
+		});
+		
+		d3.json("data2015.json", function(json) {
+			dataset2015 = json;
+		});
+		
+		
+		function createPlot(){
+				
+			scaleX = d3.scale.linear()
+						.domain([0, d3.max(dataset, function(d){ return d["Prostitution"]; })])
+						.range([padding, w-padding]);
+			scaleY = d3.scale.linear()
+						.domain([0, d3.max(dataset, function(d){ return d["Vehicle Theft"]; })])
+						.range([h-padding, padding]);
+			rScale = d3.scale.linear()
+						 .domain([0, d3.max(dataset, function(d) { return d["Total"]; })])
+						 .range([1, 20]);
+				  
+			svg.selectAll("circle")
+				.data(dataset)
+				.enter()
+				.append("circle")
+				.attr({
+					cx: function(d){return scaleX(d["Prostitution"]);},
+					cy: function(d){return scaleY(d["Vehicle Theft"]);},
+					r:  function(d) { return rScale(d["Total"]);},
+					fill: function(d) { return "orange";}
+				});
+			svg.selectAll("text")
+				.data(dataset)
+				.enter()
+				.append("text")
+				.text(function(d){return d["District"]; })
+				.attr("x", function(d) { return scaleX(d["Prostitution"]); })
+				.attr("y", function(d) { return scaleY(d["Vehicle Theft"]); })
+				.attr("font-family", "sans-serif")
+				.attr("font-size", "12px")
+				.attr("text-anchor", "middle")
+				.attr("class", "district")
+				.attr("fill", "black");
+			
+			svg.append("text")
+				.attr("class", "x label")
+				.attr("text-anchor", "middle")
+				.attr("x", w/2)
+				.attr("y", h - 6)
+				.attr("font-family", "sans-serif")
+				.attr("font-size", "12px")
+				.text("Prostitution");
+				
+			svg.append("text")
+				.attr("class", "y label")
+				.attr("text-anchor", "middle")
+				.attr("y", 20)
+				.attr("x", -(h/2))
+				.attr("font-family", "sans-serif")
+				.attr("font-size", "12px")
+				.attr("transform", "rotate(-90)")
+				.text("Vehicle Theft");
+			
+			svg.append("text")
+				.attr("class", "year")
+				.attr("text-anchor", "middle")
+				.attr("x", w/2)
+				.attr("y", 25)
+				.attr("font-family", "sans-serif")
+				.attr("font-size", "12px")
+				.text("Plot of crimes in 2003");
+			
+			var xAxis = d3.svg.axis()
+					  .scale(scaleX)
+					  .ticks(8)
+					  .orient("bottom");
+			var yAxis = d3.svg.axis()
+					  .scale(scaleY)
+					  .ticks(8)
+					  .orient("left");
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(0," + (h - padding) + ")")
+				.call(xAxis);
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate("+padding+",0)")
+				.call(yAxis);
+			
+		}
+	
+	</script>
+	<p id="ass2bbutton">Click here to switch between 2003 and 2015</p>
+	
+	
+	<script type="text/javascript">
+		var isShowing2003 = true;
+		
+		
+		d3.select("#ass2bbutton")
+			.on("click", function() {
+				if(isShowing2003){
+					console.log("isShowing2015")
+					isShowing2003 = false;
+					svg.selectAll("circle")
+						.data(dataset2015)
+						.transition()
+						.duration(1000)
+						.attr({
+						cx: function(d){return scaleX(d["Prostitution"]);},
+						cy: function(d){return scaleY(d["Vehicle Theft"]);},
+						r:  function(d) { return rScale(d["Total"]);}
+					});
+					
+					svg.selectAll(".district")
+						.data(dataset2015)
+						.transition()
+						.duration(1000)
+						.attr("x", function(d) { return scaleX(d["Prostitution"]); })
+						.attr("y", function(d) { return scaleY(d["Vehicle Theft"]); });
+						
+					svg.select(".year")
+						.text("Plot of crimes in 2015");
+				
+				} else {
+					console.log("isShowing2003")
+					isShowing2003 = true;
+					svg.selectAll("circle")
+						.data(dataset)
+						.transition()
+						.duration(1000)
+						.attr({
+						cx: function(d){return scaleX(d["Prostitution"]);},
+						cy: function(d){return scaleY(d["Vehicle Theft"]);},
+						r:  function(d) { return rScale(d["Total"]);}
+					});
+					
+					svg.selectAll(".district")
+						.data(dataset)
+						.transition()
+						.duration(1000)
+						.attr("x", function(d) { return scaleX(d["Prostitution"]); })
+						.attr("y", function(d) { return scaleY(d["Vehicle Theft"]); });
+						
+						
+					svg.select(".year")
+						.text("Plot of crimes in 2003");
+				}
+				
+			   
+			});
+	</script>
+	
+	
+	<p>The reason why we want the axis to stay the same when changing between the years is because if they stay </br>the same, the change gives a better understanding of which districts have moved their crimecount. </br> This can be seen by the movement of the datapoints on the axis but also on the size of he datapoints.</p>
+	
+<br/>
+
+<h2>Assignment 2B: Visualizing geodata</h2> 
+
+
+
+</body>
 </html>
