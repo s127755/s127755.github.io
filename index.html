@@ -39,10 +39,10 @@
 		function createPlot(){
 				
 			scaleX = d3.scale.linear()
-						.domain([0, d3.max(dataset, function(d){ return d["Prostitution"]; })])
+						.domain([0, d3.max(dataset, function(d){ return d["P"]; })])
 						.range([padding, w-padding]);
 			scaleY = d3.scale.linear()
-						.domain([0, d3.max(dataset, function(d){ return d["Vehicle Theft"]; })])
+						.domain([0, d3.max(dataset, function(d){ return d["V"]; })])
 						.range([h-padding, padding]);
 			rScale = d3.scale.linear()
 						 .domain([0, d3.max(dataset, function(d) { return d["Total"]; })])
@@ -53,8 +53,8 @@
 				.enter()
 				.append("circle")
 				.attr({
-					cx: function(d){return scaleX(d["Prostitution"]);},
-					cy: function(d){return scaleY(d["Vehicle Theft"]);},
+					cx: function(d){return scaleX(d["P"]);},
+					cy: function(d){return scaleY(d["V"]);},
 					r:  function(d) { return rScale(d["Total"]);},
 					fill: function(d) { return "orange";}
 				});
@@ -63,8 +63,8 @@
 				.enter()
 				.append("text")
 				.text(function(d){return d["District"]; })
-				.attr("x", function(d) { return scaleX(d["Prostitution"]); })
-				.attr("y", function(d) { return scaleY(d["Vehicle Theft"]); })
+				.attr("x", function(d) { return scaleX(d["P"]); })
+				.attr("y", function(d) { return scaleY(d["V"]); })
 				.attr("font-family", "sans-serif")
 				.attr("font-size", "12px")
 				.attr("text-anchor", "middle")
@@ -136,8 +136,8 @@
 						.transition()
 						.duration(1000)
 						.attr({
-						cx: function(d){return scaleX(d["Prostitution"]);},
-						cy: function(d){return scaleY(d["Vehicle Theft"]);},
+						cx: function(d){return scaleX(d["P"]);},
+						cy: function(d){return scaleY(d["V"]);},
 						r:  function(d) { return rScale(d["Total"]);}
 					});
 					
@@ -145,8 +145,8 @@
 						.data(dataset2015)
 						.transition()
 						.duration(1000)
-						.attr("x", function(d) { return scaleX(d["Prostitution"]); })
-						.attr("y", function(d) { return scaleY(d["Vehicle Theft"]); });
+						.attr("x", function(d) { return scaleX(d["P"]); })
+						.attr("y", function(d) { return scaleY(d["V"]); });
 						
 					svg.select(".year")
 						.text("Plot of crimes in 2015");
@@ -159,8 +159,8 @@
 						.transition()
 						.duration(1000)
 						.attr({
-						cx: function(d){return scaleX(d["Prostitution"]);},
-						cy: function(d){return scaleY(d["Vehicle Theft"]);},
+						cx: function(d){return scaleX(d["P"]);},
+						cy: function(d){return scaleY(d["V"]);},
 						r:  function(d) { return rScale(d["Total"]);}
 					});
 					
@@ -168,8 +168,8 @@
 						.data(dataset)
 						.transition()
 						.duration(1000)
-						.attr("x", function(d) { return scaleX(d["Prostitution"]); })
-						.attr("y", function(d) { return scaleY(d["Vehicle Theft"]); });
+						.attr("x", function(d) { return scaleX(d["P"]); })
+						.attr("y", function(d) { return scaleY(d["V"]); });
 						
 						
 					svg.select(".year")
