@@ -333,8 +333,7 @@ By clicking on the buttons below you can change the number of clusters.<br>
 					           		}
 					           		return colors[numberClosest];
 
-					           })
-					           .style("opacity", 0.8);
+					           });
 
 					    //Creating the means
 					    var kColorNumber = -1;
@@ -370,7 +369,6 @@ By clicking on the buttons below you can change the number of clusters.<br>
 
 <script type="text/javascript">
 	
-
 		var isShowing = 2;
 		d3.select("#k2")
 					.on("click", function() {
@@ -415,8 +413,8 @@ By clicking on the buttons below you can change the number of clusters.<br>
 
 Click <a href="http://nbviewer.jupyter.org/url/s127755.github.io/Assignment2_datasets.ipynb">here</a> to see how i generate my datasets. <br>
 Or download the notebook <a href="http://s127755.github.io/Assignment2_datasets.ipynb">here</a>.
-
 <br>
+ps. The size of the file is important because it takes time to load it and also making it too large will not make transition-animations smooth.
 <br>
 <br>
 <br>
