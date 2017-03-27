@@ -186,14 +186,233 @@
 <br/>
 
 <h2>Assignment 2B: Visualizing geodata</h2> 
-Click <a href="http://s127755.github.io/Assignment2_Week5_Clustering.ipynb">here</a> to see my solution to clustering in week 5.
+Click <a href="http://nbviewer.jupyter.org/url/s127755.github.io/Assignment2_Week5_Clustering.ipynb">here</a> to see my solution to clustering from week 5. <br>
+Or download it <a href="http://s127755.github.io/Assignment2_Week5_Clustering.ipynb">here</a>.
 
 
 	<div id="id2b"></div>
 	<script type="text/javascript">
 
+
+		//Width and height
+		var w2 = 600;
+		var h2 = 600;
+
+		var numkmeans = 0;
+		var colors = ["rgb(218, 124, 48)", 
+					"rgb(62, 150, 81)", 
+					"rgb(204, 37, 41)", 
+					"rgb(107, 76, 156)", 
+					"rgb(83, 81, 84)", 
+					"rgb(148, 139, 61)"]
+
+
+	    var svg2 = d3.select("#id2b")
+					.append("svg")
+					.attr("width", w2)
+					.attr("height", h2);
+
+		//var path = d3.geo.path();
+
+		// Create a unit projection.
+		var projection = d3.geo.albers()
+		    .scale(1)
+		    .translate([0, 0]);
+
+		// Create a path generator.
+		var path = d3.geo.path()
+		    .projection(projection);
+
+		var kmeansdata;
+		var allPoints;
+
+		d3.json("https://raw.githubusercontent.com/suneman/socialdataanalysis2017/master/files/sfpddistricts.geojson", function(json) {
+		//d3.json("us-states.json", function(json) {
+
+			// Compute the bounds of a feature of interest, then derive scale & translate.
+			var b = path.bounds(json),
+			    s = .99 / Math.max((b[1][0] - b[0][0]) / w2, (b[1][1] - b[0][1]) / h2),
+			    t = [(w2 - s * (b[1][0] + b[0][0])) / 2, (h2 - s * (b[1][1] + b[0][1])) / 2];
+
+			// Update the projection to use computed scale & translate.
+			projection
+			    .scale(s)
+			    .translate(t);
+
+			svg2.selectAll("path")
+			   .data(json.features)
+			   .enter()
+			   .append("path")
+			   .attr("d", path)
+			   .style("fill", "rgb(0, 100, 200)");
+
+			d3.json("kmeansData.json", function(json) {
+				kmeansdata = json['kMeans'];
+				allPoints = json['points'];
+				insert_kmeans(2);
+			});
+		});
+
+
+
+		function square_distance(p1, p2){
+			return Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2)
+		}
+
+		function insert_kmeans(numOfkMeans){
+				//inserting the points
+				svg2.selectAll("circle.points")
+			           .data(allPoints)
+			           .enter()
+			           .append("circle")
+			           .attr("class", "points")
+			           .attr("cx", function(d) {
+			           		return projection([d[0], d[1]])[0];
+			           })
+			           .attr("cy", function(d) {
+			                return projection([d[0], d[1]])[1];
+			           })
+			           .attr("r", 2)
+			           .style("fill", function(d){
+							numberClosest = 0;
+			           		closestDist = 1000;
+			           		for (i = 0; i < kmeansdata[numOfkMeans-2].length; i++){
+			           			dist = square_distance(kmeansdata[numOfkMeans-2][i], d)
+			           			if(dist < closestDist){
+			           				numberClosest = i;
+			           				closestDist = dist;
+			           			}
+			           		}
+			           		return colors[numberClosest];
+
+			           })
+			           .style("opacity", 0.8);
+
+			    //Creating the means
+			    var kColorNumber = -1;
+				svg2.selectAll("circle.means")
+			           .data(kmeansdata[numOfkMeans-2])
+			           .enter()
+			           .append("circle")
+			           .attr("class", "means")
+			           .attr("cx", function(d) {
+			           		return projection([d[0], d[1]])[0];
+			           })
+			           .attr("cy", function(d) {
+			                return projection([d[0], d[1]])[1];
+			           })
+			           .attr("r", 10)
+			           .style("stroke", "black").attr("stroke-width", 3)
+			           .style("fill", function(d){
+			           		kColorNumber = kColorNumber + 1;
+			           		return colors[kColorNumber]
+			           	})
+			           .style("opacity", 1);
+
+		}
+
+		function change_kmeans(numOfkMeans){
+						//inserting the points
+						svg2.selectAll("circle.points")
+					           .style("fill", function(d){
+									numberClosest = 0;
+					           		closestDist = 1000;
+					           		for (i = 0; i < kmeansdata[numOfkMeans-2].length; i++){
+					           			dist = square_distance(kmeansdata[numOfkMeans-2][i], d)
+					           			if(dist < closestDist){
+					           				numberClosest = i;
+					           				closestDist = dist;
+					           			}
+					           		}
+					           		return colors[numberClosest];
+
+					           })
+					           .style("opacity", 0.8);
+
+					    //Creating the means
+					    var kColorNumber = -1;
+						svg2.selectAll("circle.means").remove();
+						svg2.selectAll("circle.means")
+					           .data(kmeansdata[numOfkMeans-2])
+					           .enter()
+					           .append("circle")
+					           .attr("class", "means")
+					           .attr("cx", function(d) {
+					           		return projection([d[0], d[1]])[0];
+					           })
+					           .attr("cy", function(d) {
+					                return projection([d[0], d[1]])[1];
+					           })
+					           .attr("r", 10)
+					           .style("stroke", "black").attr("stroke-width", 3)
+					           .style("fill", function(d){
+					           		kColorNumber = kColorNumber + 1;
+					           		return colors[kColorNumber]
+					           	})
+					           .style("opacity", 1);
+
+		}
+
 	</script>
 
+<button type="button" id="k2">Click to k2</button>
+<button type="button" id="k3">Click to k3</button>
+<button type="button" id="k4">Click to k4</button>
+<button type="button" id="k5">Click to k5</button>
+<button type="button" id="k6">Click to k6</button>
 
+<script type="text/javascript">
+	
+
+		var isShowing = 2;
+		d3.select("#k2")
+					.on("click", function() {
+						if(isShowing != 2){
+							change_kmeans(2)
+							isShowing = 2;
+						}
+					});
+		d3.select("#k3")
+					.on("click", function() {
+						if(isShowing != 3){
+							change_kmeans(3)
+							isShowing = 3;
+						}
+					});
+		d3.select("#k4")
+					.on("click", function() {
+						if(isShowing != 4){
+							change_kmeans(4)
+							isShowing = 4;
+						}
+					});
+		d3.select("#k5")
+					.on("click", function() {
+						if(isShowing != 5){
+							change_kmeans(5)
+							isShowing = 5;
+						}
+					});
+		d3.select("#k6")
+					.on("click", function() {
+						if(isShowing != 6){
+							change_kmeans(6)
+							isShowing = 6;
+						}
+					});
+
+</script>
+
+<br>
+<br>
+
+Click <a href="http://nbviewer.jupyter.org/url/s127755.github.io/Assignment2_datasets.ipynb">here</a> to see how i generate my datasets. <br>
+Or download the notebook <a href="http://s127755.github.io/Assignment2_datasets.ipynb">here</a>.
+
+<br>
+<br>
+<br>
+<br>
+<br>
 </body>
 </html>
