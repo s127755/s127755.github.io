@@ -8,18 +8,18 @@
 	</head>
 <body>
 	<h2>Assignment 2A: One scatter plot and two datasets</h2> 
-	<div id="id2b"></div>
+	<div id="id2a"></div>
 	<script type="text/javascript">
 		
 		var w = 650;
 		var h = 400;
-		var padding = 60;
+		var padding = 75;
 		
 		var scaleX;
 		var scaleY;
 		var rScale;
 		
-		var svg = d3.select("#id2b")
+		var svg = d3.select("#id2a")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
@@ -66,7 +66,7 @@
 				.attr("x", function(d) { return scaleX(d["P"]); })
 				.attr("y", function(d) { return scaleY(d["V"]); })
 				.attr("font-family", "sans-serif")
-				.attr("font-size", "12px")
+				.attr("font-size", "10px")
 				.attr("text-anchor", "middle")
 				.attr("class", "district")
 				.attr("fill", "black");
@@ -119,14 +119,14 @@
 		}
 	
 	</script>
-	<p id="ass2bbutton">Click here to switch between 2003 and 2015</p>
+	<p id="ass2abutton"><u>Click here to switch between 2003 and 2015</u></p>
 	
 	
 	<script type="text/javascript">
 		var isShowing2003 = true;
 		
 		
-		d3.select("#ass2bbutton")
+		d3.select("#ass2abutton")
 			.on("click", function() {
 				if(isShowing2003){
 					console.log("isShowing2015")
@@ -186,7 +186,13 @@
 <br/>
 
 <h2>Assignment 2B: Visualizing geodata</h2> 
+Click <a href="http://s127755.github.io/Assignment2_Week5_Clustering.ipynb">here</a> to see my solution to clustering in week 5.
 
+
+	<div id="id2b"></div>
+	<script type="text/javascript">
+
+	</script>
 
 
 </body>
