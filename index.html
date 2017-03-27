@@ -7,7 +7,11 @@
 		<link rel="stylesheet" href="style.css">
 	</head>
 <body>
-	<h2>Assignment 2A: One scatter plot and two datasets</h2> 
+	<h2>Assignment 2A: One scatter plot and two datasets</h2> <br>
+	The first plot is a plot of the crimes in 2003/2015. <br>
+	The orange circles represents each district in LA, the size representing the total amount of crimes.<br>
+	The axis represent respecively Vehicle Theft and Prostitution <br>
+	You can click on the text below the plot to see the development from 2003 to 2015.<br>
 	<div id="id2a"></div>
 	<script type="text/javascript">
 		
@@ -188,6 +192,11 @@
 <h2>Assignment 2B: Visualizing geodata</h2> 
 Click <a href="http://nbviewer.jupyter.org/url/s127755.github.io/Assignment2_Week5_Clustering.ipynb">here</a> to see my solution to clustering from week 5. <br>
 Or download it <a href="http://s127755.github.io/Assignment2_Week5_Clustering.ipynb">here</a>.
+<br>
+The image below shows a map of the city of Los Angeles. <br>
+On the map i have plotted LAPD's records of prostitution. <br>
+I have used k-means to visualize clusters in the city where you are most likely to encounter prostitution.<br>
+By clicking on the buttons below you can change the number of clusters.<br>
 
 
 	<div id="id2b"></div>
@@ -224,7 +233,6 @@ Or download it <a href="http://s127755.github.io/Assignment2_Week5_Clustering.ip
 		    .projection(projection);
 
 		var kmeansdata;
-		var allPoints;
 
 		d3.json("https://raw.githubusercontent.com/suneman/socialdataanalysis2017/master/files/sfpddistricts.geojson", function(json) {
 		//d3.json("us-states.json", function(json) {
@@ -248,8 +256,7 @@ Or download it <a href="http://s127755.github.io/Assignment2_Week5_Clustering.ip
 
 			d3.json("kmeansData.json", function(json) {
 				kmeansdata = json['kMeans'];
-				allPoints = json['points'];
-				insert_kmeans(2);
+				insert_kmeans(2, json['points']);
 			});
 		});
 
@@ -259,7 +266,7 @@ Or download it <a href="http://s127755.github.io/Assignment2_Week5_Clustering.ip
 			return Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2)
 		}
 
-		function insert_kmeans(numOfkMeans){
+		function insert_kmeans(numOfkMeans, allPoints){
 				//inserting the points
 				svg2.selectAll("circle.points")
 			           .data(allPoints)
