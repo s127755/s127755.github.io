@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Social data analysis and visualization (02806)</title>
+		<script type="text/javascript" src="../d3/d3.js"></script>
 		<link rel="stylesheet" href="../style.css">
 	</head>
 	<body>
@@ -12,10 +13,117 @@
 					<a href="http://s127755.github.io/final">Back to final project</a>
 
 					<h2>Interesting dataset statistics</h2> 
-
-
 					<br>
-					The notebook for making these plots and statistics are available <a href="">Here</a>.
+					The notebook for making these plots and statistics are available <a href="">Here</a>.<br>
+
+
+					<div id="idplot1"></div>
+					<script type="text/javascript">
+						
+						var w = 650;
+						var h = 400;
+						var padding = 75;
+						var scaleX;
+						var scaleY;
+						var rScale;
+						
+						var svg = d3.select("#idplot1")
+								.append("svg")
+								.attr("width", w)
+								.attr("height", h);
+
+
+
+						var dataset;
+						d3.json("trafficDataStatistics.json", function(json) {
+							dataset = json;
+							createPlot(0);
+						});
+						
+						
+						function createPlot(streetNum){
+								
+
+							// scaleX = d3.scale.linear()
+							// 			.domain([0, d3.max(dataset, function(d){ return d["P"]; })])
+							// 			.range([padding, w-padding]);
+							// scaleY = d3.scale.linear()
+							// 			.domain([0, d3.max(dataset, function(d){ return d["V"]; })])
+							// 			.range([h-padding, padding]);
+							// rScale = d3.scale.linear()
+							// 			 .domain([0, d3.max(dataset, function(d) { return d["Total"]; })])
+							// 			 .range([1, 20]);
+								  
+							// svg.selectAll("circle")
+							// 	.data(dataset)
+							// 	.enter()
+							// 	.append("circle")
+							// 	.attr({
+							// 		cx: function(d){return scaleX(d["P"]);},
+							// 		cy: function(d){return scaleY(d["V"]);},
+							// 		r:  function(d) { return rScale(d["Total"]);},
+							// 		fill: function(d) { return "orange";}
+							// 	});
+							// svg.selectAll("text")
+							// 	.data(dataset)
+							// 	.enter()
+							// 	.append("text")
+							// 	.text(function(d){return d["District"]; })
+							// 	.attr("x", function(d) { return scaleX(d["P"]); })
+							// 	.attr("y", function(d) { return scaleY(d["V"]); })
+							// 	.attr("font-family", "sans-serif")
+							// 	.attr("font-size", "10px")
+							// 	.attr("text-anchor", "middle")
+							// 	.attr("class", "district")
+							// 	.attr("fill", "black");
+							
+							// svg.append("text")
+							// 	.attr("class", "x label")
+							// 	.attr("text-anchor", "middle")
+							// 	.attr("x", w/2)
+							// 	.attr("y", h - 6)
+							// 	.attr("font-family", "sans-serif")
+							// 	.attr("font-size", "12px")
+							// 	.text("Prostitution");
+								
+							// svg.append("text")
+							// 	.attr("class", "y label")
+							// 	.attr("text-anchor", "middle")
+							// 	.attr("y", 20)
+							// 	.attr("x", -(h/2))
+							// 	.attr("font-family", "sans-serif")
+							// 	.attr("font-size", "12px")
+							// 	.attr("transform", "rotate(-90)")
+							// 	.text("Vehicle Theft");
+							
+							// svg.append("text")
+							// 	.attr("class", "year")
+							// 	.attr("text-anchor", "middle")
+							// 	.attr("x", w/2)
+							// 	.attr("y", 25)
+							// 	.attr("font-family", "sans-serif")
+							// 	.attr("font-size", "12px")
+							// 	.text("Plot of crimes in 2003");
+							
+							// var xAxis = d3.svg.axis()
+							// 		  .scale(scaleX)
+							// 		  .ticks(8)
+							// 		  .orient("bottom");
+							// var yAxis = d3.svg.axis()
+							// 		  .scale(scaleY)
+							// 		  .ticks(8)
+							// 		  .orient("left");
+							// svg.append("g")
+							// 	.attr("class", "axis")
+							// 	.attr("transform", "translate(0," + (h - padding) + ")")
+							// 	.call(xAxis);
+							// svg.append("g")
+							// 	.attr("class", "axis")
+							// 	.attr("transform", "translate("+padding+",0)")
+							// 	.call(yAxis);
+						}
+					</script>
+
 					<br><br><br><br>
 			</div>
 		</div>
