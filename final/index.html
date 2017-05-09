@@ -7,7 +7,51 @@
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
-	<a href="http://s127755.github.io">Back to front page</a><br>
-	<h2>This is the final project for the Social Data Analysis and Visualization course.</h2> <br>
+		<div class="bg">
+			<div class="content">
+
+
+					<a href="http://s127755.github.io">Back to front page</a><br>
+					<h1>Final project for the Social Data Analysis and Visualization course</h1> <br>
+
+					<h3>Introduction</h3>
+					The city that you will learn more about here is Copenhagen.
+					What i want to investigate, and what my main dataset is centered around, is where and when we see traffic in the city.
+					&nbsp;(<i>A short <a href="https://youtu.be/MK6N3-TE5oY">video</a> of my ealy progress - Final Assignment A</i>)
+
+					To do this i have found a <a href="http://data.kk.dk/dataset/faste-trafiktaellinger">dataset</a> containing fixed traffic counts at specific places in copenhagen.
+					The datasets contains data on car traffic from 2005-2014 and can give me a good estimate of the Copenhagen traffic. Combining this dataset with other datasets from the same website, i've come to better understand copenhagen trafic. Now i will share what i have found with you.
+
+					<br><br>
+
+					<h3>Intro to the dataset</h3>
+					Going over the dataset i discovered that not every counting station were active every day of the year. There were periods of time where they wouldn't record anything at all. This ofcaurse makes sense, since the stations might be needing mainainge sometimes or other accidents could happen. Also the city might have been setting up new stations or taking down old stations throughout the years. Therefore I've plotted when  each counting station has been active. These plots and more about them can be found <a href="http://s127755.github.io/final/recordingdays">here</a>. <br><br>
+
+					<b>Where to find the counting stations:</b><br>
+					It is important to know where the stations are placed in the city. If they are all placed in the same general area the data will not be able to give me a picture of the city traffic as a whole. I've used python to plot the stations into a geoplot showing me where the stations are located. As we can see, the 22 counting stations are quite evenly spread out. They do not capture all the highways going in and out of the city niether are they only focused on smaller roads in the city. I would say that they will be able to give me a good estimate of the daily traffic in the city.<br><br>
+					<img src="images/recording_spots.png"><br>
+					<br>
+					<b>Counting staistics</b><br>
+					Going through the dataset I've found some interesting statistics:<br><br>
+					<lu>
+					<li>The total number of rows in the dataset: 183.397 rows</li>
+					<li>The total number of cars recorded by the dataset: 1.079.134.707 cars</li>
+					<li>The largest number of cars recorded in a day is 68.033 cars in a day (Recorded at Åboulevard in 14.05.2007)</li>
+					<li>The largest peak hour recorded is 10.658 cars in an hour (Recorded at Kalkbrænderihavnsgade in 26.04.2006 12:00-13:00)</li>
+					<li>Avg number of cars each day total</li>
+					<li>Avg number of cars each day each year</li>
+					<li>A small collection of graphs that are interesting to look at (avg progress/hour for a week, day/year)</li>
+
+					</lu>
+
+					<br>
+					<br>
+					<h3>Heatmap changing with time for a certain day</h3><br>
+
+
+
+
+			</div>
+		</div>
 	</body>
 </html>
