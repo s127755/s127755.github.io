@@ -14,7 +14,7 @@
 
 					<h2>Interesting dataset statistics</h2> 
 					<br>
-					The notebook for making these plots and statistics are available <a href="http://nbviewer.jupyter.org/url/s127755.github.io/final/statistics/statistics.ipynb">Here</a>.<br>
+					The notebook for making the dataset behind these plots and statistics are available <a href="http://nbviewer.jupyter.org/url/s127755.github.io/final/statistics/statistics.ipynb">Here</a>.<br>
 
 					<br><br>
 
@@ -52,7 +52,6 @@
 						
 						
 						function createPlot(streetNum){
-							console.log("Something");
 							var chosenStreet = dataset[streetNum];
 							for (var i in chosenStreet['avg_day']){
 								xvalues.push(i);
@@ -131,9 +130,7 @@
 							        .style("font-size", "14px") 
 							        .text("24 hour plot of average number of cars recorded");
 
-
 						}
-
 
 						function changePlot(streetNum){
 							var chosenStreet = dataset[streetNum];
@@ -219,14 +216,6 @@
 						handle = slider.insert("circle", ".track-overlay")
 						    .attr("class", "handle")
 						    .attr("r", 9);
-
-						// myText = svgSlider.append("text")
-						//         .attr("x", (width / 2))             
-						//         .attr("y", 20)
-						//         .attr("text-anchor", "middle")  
-						//         .style("font-size", "12px") 
-						//         .text("0");
-
 					}
 
 					function sliderEvent(h) {
@@ -234,8 +223,11 @@
 					  changePlot(Math.round(h))
 					}
 
-
 					</script>
+					<br><br>
+					The plots show that, the different counting stations have almost the same development of the number of cars recorded throughout the day. Only some of the counting stations has counts that are a little more spiky around 7-9 and again around 15-17. This is understandable because that is more or less when people are on their way to or from work. 
+
+
 
 					<br><br><br><br>
 			</div>
