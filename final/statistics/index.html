@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Social data analysis and visualization (02806)</title>
-		<script type="text/javascript" src="../d3/d3.js"></script>
+		<script type="text/javascript" src="../d3new/d3.js"></script>
 		<link rel="stylesheet" href="../style.css">
 	</head>
 	<body>
@@ -16,112 +16,225 @@
 					<br>
 					The notebook for making these plots and statistics are available <a href="">Here</a>.<br>
 
+					<br><br>
+
+					<svg id="idSlider" width="960" height="150"></svg>
+					
+
 
 					<div id="idplot1"></div>
 					<script type="text/javascript">
 						
-						var w = 650;
-						var h = 400;
-						var padding = 75;
-						var scaleX;
-						var scaleY;
-						var rScale;
-						
+						var w = 850;
+						var h = 450;
+						var padding = 35;
+						var maxYValue = 4050;
+						var scaleY = d3.scaleLinear()
+									.domain([0, maxYValue])
+									.range([h, 0]);
+						var scaleXBand;
 						var svg = d3.select("#idplot1")
 								.append("svg")
-								.attr("width", w)
-								.attr("height", h);
+								.attr("width", w+padding+padding)
+								.attr("height", h+padding+padding);
 
 
+						var yvalues = [];
+						var xvalues = [];
+						var mLine;
 
 						var dataset;
 						d3.json("trafficDataStatistics.json", function(json) {
 							dataset = json;
 							createPlot(0);
+							initSlider();
 						});
 						
 						
 						function createPlot(streetNum){
-								
+							console.log("Something");
+							var chosenStreet = dataset[streetNum];
+							for (var i in chosenStreet['avg_day']){
+								xvalues.push(i);
+								yvalues.push(chosenStreet['avg_day'][i]);
+							}
+							
 
-							// scaleX = d3.scale.linear()
-							// 			.domain([0, d3.max(dataset, function(d){ return d["P"]; })])
-							// 			.range([padding, w-padding]);
-							// scaleY = d3.scale.linear()
-							// 			.domain([0, d3.max(dataset, function(d){ return d["V"]; })])
-							// 			.range([h-padding, padding]);
-							// rScale = d3.scale.linear()
-							// 			 .domain([0, d3.max(dataset, function(d) { return d["Total"]; })])
-							// 			 .range([1, 20]);
-								  
-							// svg.selectAll("circle")
-							// 	.data(dataset)
-							// 	.enter()
-							// 	.append("circle")
-							// 	.attr({
-							// 		cx: function(d){return scaleX(d["P"]);},
-							// 		cy: function(d){return scaleY(d["V"]);},
-							// 		r:  function(d) { return rScale(d["Total"]);},
-							// 		fill: function(d) { return "orange";}
-							// 	});
-							// svg.selectAll("text")
-							// 	.data(dataset)
-							// 	.enter()
-							// 	.append("text")
-							// 	.text(function(d){return d["District"]; })
-							// 	.attr("x", function(d) { return scaleX(d["P"]); })
-							// 	.attr("y", function(d) { return scaleY(d["V"]); })
-							// 	.attr("font-family", "sans-serif")
-							// 	.attr("font-size", "10px")
-							// 	.attr("text-anchor", "middle")
-							// 	.attr("class", "district")
-							// 	.attr("fill", "black");
-							
-							// svg.append("text")
-							// 	.attr("class", "x label")
-							// 	.attr("text-anchor", "middle")
-							// 	.attr("x", w/2)
-							// 	.attr("y", h - 6)
-							// 	.attr("font-family", "sans-serif")
-							// 	.attr("font-size", "12px")
-							// 	.text("Prostitution");
-								
-							// svg.append("text")
-							// 	.attr("class", "y label")
-							// 	.attr("text-anchor", "middle")
-							// 	.attr("y", 20)
-							// 	.attr("x", -(h/2))
-							// 	.attr("font-family", "sans-serif")
-							// 	.attr("font-size", "12px")
-							// 	.attr("transform", "rotate(-90)")
-							// 	.text("Vehicle Theft");
-							
-							// svg.append("text")
-							// 	.attr("class", "year")
-							// 	.attr("text-anchor", "middle")
-							// 	.attr("x", w/2)
-							// 	.attr("y", 25)
-							// 	.attr("font-family", "sans-serif")
-							// 	.attr("font-size", "12px")
-							// 	.text("Plot of crimes in 2003");
-							
-							// var xAxis = d3.svg.axis()
-							// 		  .scale(scaleX)
-							// 		  .ticks(8)
-							// 		  .orient("bottom");
-							// var yAxis = d3.svg.axis()
-							// 		  .scale(scaleY)
-							// 		  .ticks(8)
-							// 		  .orient("left");
-							// svg.append("g")
-							// 	.attr("class", "axis")
-							// 	.attr("transform", "translate(0," + (h - padding) + ")")
-							// 	.call(xAxis);
-							// svg.append("g")
-							// 	.attr("class", "axis")
-							// 	.attr("transform", "translate("+padding+",0)")
-							// 	.call(yAxis);
+							scaleXBand = d3.scaleBand()
+									.domain(xvalues)
+							        .range([padding, w + padding])
+							        .padding(0.1);
+
+							//Making the line
+							mLine = d3.line()
+					                   .x(function(d) { return scaleXBand(d)+padding/2; })
+					                   .y(function(d) { return scaleY(yvalues[d]); })
+					                   .curve(d3.curveCardinal.tension(0.2)); 
+
+							svg.append('path')
+						    	.attr("class", "redpath")
+							    .attr("d", mLine(xvalues))
+							    .attr("stroke", "red")
+							    .attr("stroke-width", 2)
+							    .attr("fill", "none");
+
+							  //Add the barchart
+							svg.selectAll(".bar")
+							    .data(xvalues)
+							    .enter().append("rect")
+							    .attr("opacity", 0.2)
+							    .attr("fill", "steelblue")
+							    .attr("width", scaleXBand.bandwidth())
+							    .attr("height", function(d) { return h - scaleY(yvalues[d]); })
+							    .attr("x", function(d) { return scaleXBand(d); })
+							    .attr("y", function(d) { return scaleY(yvalues[d]); });
+
+
+							var xAxis = d3.axisBottom()
+									.scale(scaleXBand)
+									.tickFormat(function (d) { return 'kl. ' + d + '-' + (parseInt(d)+1); })
+									.ticks(23);
+							var yAxis = d3.axisLeft()
+									.tickFormat(function (d) { return d; })
+									.scale(scaleY)
+									.ticks(8);
+
+							svg.append("g")
+								.attr("transform", "translate(0," + h + ")")
+								.call(xAxis)
+								.selectAll("text")	
+						            .style("text-anchor", "end")
+						            .attr("dx", ".2em")
+						            .attr("dy", ".8em")
+						            .attr("transform", function(d) {
+						                return "rotate(-45)" 
+						                });
+
+							svg.append("g")
+								.attr("transform", "translate("+padding+",0)")
+								.call(yAxis);
+
+
+							myText = svg.append("text")
+							        .attr("x", (w / 2))             
+							        .attr("y", 40)
+							        .attr("text-anchor", "middle")  
+							        .style("font-size", "14px") 
+							        .text(function (d){ 
+							        	return dataset[0]['street']; 
+							        });
+
+							svg.append("text")
+							        .attr("x", (w / 2))             
+							        .attr("y", 20)
+							        .attr("text-anchor", "middle")  
+							        .style("font-size", "14px") 
+							        .text("24 hour plot of average number of cars recorded");
+
+
 						}
+
+
+						function changePlot(streetNum){
+							var chosenStreet = dataset[streetNum];
+							yvalues = [];
+							xvalues = [];
+							for (var i in chosenStreet['avg_day']){
+								xvalues.push(i);
+								yvalues.push(chosenStreet['avg_day'][i]);
+							}
+
+							svg.selectAll(".redpath")
+								.transition()
+								.duration(1000)
+							    .attr("d", mLine(xvalues));
+
+
+						    svg.selectAll("rect")
+								.data(xvalues)
+								.transition()
+								.duration(1000)
+							    .attr("width", scaleXBand.bandwidth())
+							    .attr("height", function(d) { return h - scaleY(yvalues[d]); })
+							    .attr("x", function(d) { return scaleXBand(d); })
+							    .attr("y", function(d) { return scaleY(yvalues[d]); });
+
+							myText.text(function(d) { return dataset[streetNum]['street'] })
+						}
+						
+					</script>
+
+					<script type="text/javascript">
+
+					var handle;
+					var myText;
+					var x;
+					var slider;
+
+					function initSlider(){
+						var svgSlider = d3.select("#idSlider"),
+						    margin = {right: 50, left: 50},
+						    width = +svgSlider.attr("width") - margin.left - margin.right,
+						    height = +svgSlider.attr("height");
+
+						x = d3.scaleLinear()
+						    .domain([0, 21])
+						    .range([0, width])
+						    .clamp(true);
+
+						slider = svgSlider.append("g")
+						    .attr("class", "slider")
+						    .attr("transform", "translate(" + margin.left + "," + margin.left/2 + ")");
+
+						slider.append("line")
+						    .attr("class", "track")
+						    .attr("x1", x.range()[0])
+						    .attr("x2", x.range()[1])
+						  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+						    .attr("class", "track-inset")
+						  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+						    .attr("class", "track-overlay")
+						    .call(d3.drag()
+						        .on("start.interrupt", function() { slider.interrupt(); })
+						        .on("start drag", function() { sliderEvent(x.invert(d3.event.x)); }));
+
+						slider.insert("g", ".track-overlay")
+						    .attr("class", "ticks")
+							.attr("transform", "translate(0," + 50 + ")")
+							.selectAll("text")
+								.data(x.ticks(22))
+								.enter().append("text")
+								.attr("x", function(d){
+									return x(d/1.42);
+								})
+								.attr("y", function(d){
+									return x(d/1.42);
+								})
+							    .attr("text-anchor", "middle")
+						            .attr("transform", function(d) {
+						                return "rotate(-45)" 
+						                })
+							    .text(function(d) { return dataset[d]['street']; });
+
+						handle = slider.insert("circle", ".track-overlay")
+						    .attr("class", "handle")
+						    .attr("r", 9);
+
+						// myText = svgSlider.append("text")
+						//         .attr("x", (width / 2))             
+						//         .attr("y", 20)
+						//         .attr("text-anchor", "middle")  
+						//         .style("font-size", "12px") 
+						//         .text("0");
+
+					}
+
+					function sliderEvent(h) {
+					  handle.attr("cx", x(h));
+					  changePlot(Math.round(h))
+					}
+
+
 					</script>
 
 					<br><br><br><br>
